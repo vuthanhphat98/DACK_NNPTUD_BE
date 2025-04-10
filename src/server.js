@@ -11,6 +11,7 @@ const fs = require('fs');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const menuRoutes = require('./routes/menu.routes');
+const categoryRoutes = require('./routes/category.routes');
 
 const app = express();
 
@@ -45,7 +46,8 @@ app.use('/api/uploads',express.static(path.join(__dirname, '../public/uploads'))
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/menu', menuRoutes); 
+app.use('/api/menu', menuRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.get('/check-image/:filename', (req, res) => {
   const filePath = path.join(__dirname, 'public/uploads/menu_images', req.params.filename);

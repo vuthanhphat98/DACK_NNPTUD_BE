@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const menuItemSchema = new mongoose.Schema({
@@ -33,12 +32,17 @@ const menuItemSchema = new mongoose.Schema({
         // Nếu không dùng Category model, có thể để type: String
     },
     category_name: { // Lưu thêm tên category để dễ truy vấn (hoặc dùng $lookup)
-        type: String,
-        trim: true
+        type: mongoose.Schema.Types.ObjectId, // Tham chiếu đến model Category (nếu có)
+        ref: 'Category'
     },
     status: {
         type: Boolean,
         default: true // true: còn hàng, false: hết hàng
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: [true, 'Danh mục là bắt buộc']
     }
 }, {
     timestamps: true // Tự động thêm createdAt và updatedAt

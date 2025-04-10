@@ -23,7 +23,8 @@ class MenuController {
                 ...requestData,
                 price: Number(requestData.price), // Đảm bảo giá là Number
                 status: requestData.status ? requestData.status === 'true' : true, // Chuyển đổi status từ string nếu cần
-                image: imagePath // Lưu đường dẫn tương đối
+                image: imagePath, // Lưu đường dẫn tương đối
+                category: requestData.category // Thêm category ID
             };
 
             const newItem = new MenuItem(newItemData);
@@ -60,6 +61,7 @@ class MenuController {
             const skip = (page - 1) * limit;
 
             const items = await MenuItem.find()
+                .populate('category', 'name')
                 .skip(skip)
                 .limit(limit)
                 .sort({ createdAt: -1 });
@@ -96,7 +98,7 @@ class MenuController {
     async getMenuItemById(req, res, next) {
         try {
             const itemId = req.params.id;
-            const item = await MenuItem.findById(itemId);
+            const item = await MenuItem.findById(itemId).populate('category', 'name');
 
             if (!item) {
                 return res.status(404).json({ message: 'Không tìm thấy món ăn' });
