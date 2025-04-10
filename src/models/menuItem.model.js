@@ -43,6 +43,17 @@ const menuItemSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: [true, 'Danh mục là bắt buộc']
+    },
+    ratingAverage: {
+        type: Number,
+        default: 0,
+        min: [0, 'Rating không thể nhỏ hơn 0'],
+        max: [5, 'Rating không thể lớn hơn 5'],
+        set: val => Math.round(val * 10) / 10 // Làm tròn 1 chữ số thập phân
+    },
+    ratingCount: {
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true // Tự động thêm createdAt và updatedAt
