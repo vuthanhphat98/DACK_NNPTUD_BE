@@ -29,7 +29,7 @@ const upload = multer({
     storage: storage,
     fileFilter: imageFileFilter,
     limits: {
-        fileSize: 1024 * 1024 * 5 // Giới hạn dung lượng file 5MB
+        fileSize: 600 * 900 * 5 // Giới hạn dung lượng file 5MB
     }
 });
 
