@@ -1,16 +1,24 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const config = require('./config/config');
 const connectDB = require('./config/database');
 const errorHandler = require('./middlewares/error.middleware');
+const initAdmin = require('./config/initAdmin');
+const fs = require('fs');
 
 const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
+const menuRoutes = require('./routes/menu.routes');
 
 const app = express();
 
 // Connect to MongoDB
 connectDB();
+
+// Khởi tạo admin mặc định
+initAdmin();
 
 // Middleware
 app.use(cors({
@@ -28,9 +36,25 @@ app.use(session({
         maxAge: config.SESSION_EXPIRES
     }
 }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Cần thiết cho multer nếu gửi cả text fields
 
+
+// Phục vụ file tĩnh từ thư mục 'public'
+app.use('/api/uploads',express.static(path.join(__dirname, '../public/uploads')));
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/menu', menuRoutes); 
+
+app.get('/check-image/:filename', (req, res) => {
+  const filePath = path.join(__dirname, 'public/uploads/menu_images', req.params.filename);
+  if (fs.existsSync(filePath)) {
+    res.send('File exists: ' + filePath);
+  } else {
+    res.status(404).send('File does not exist: ' + filePath);
+  }
+});
 
 // Error handling middleware
 app.use(errorHandler);

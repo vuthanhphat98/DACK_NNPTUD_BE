@@ -35,4 +35,33 @@ exports.verifyRoles = (roles) => (req, res, next) => {
   } catch (err) {
     res.status(401).json({ message: "Token không hợp lệ!" });
   }
+};
+
+const isAdmin = (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Vui lòng đăng nhập' });
+    }
+
+    if (req.session.user.role !== 'ADMIN') {
+        return res.status(403).json({ message: 'Bạn không có quyền truy cập' });
+    }
+
+    next();
+};
+
+const isOwnerOrAdmin = (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(401).json({ message: 'Vui lòng đăng nhập' });
+    }
+
+    if (req.session.user.role === 'ADMIN' || req.session.user._id === req.params.id) {
+        next();
+    } else {
+        return res.status(403).json({ message: 'Bạn không có quyền thực hiện hành động này' });
+    }
+};
+
+module.exports = {
+    isAdmin,
+    isOwnerOrAdmin
 }; 
