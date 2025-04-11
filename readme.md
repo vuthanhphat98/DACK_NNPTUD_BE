@@ -3,7 +3,7 @@ Hướng dẫn sử dụng API với Postman
 Đầu tiên, tạo một environment để lưu các biến sử dụng chung:
 Nhấp vào biểu tượng "Environments" và tạo môi trường mới "Restaurant API"
 Thêm các biến sau:
-baseUrl: http://localhost:5000
+baseUrl: http://localhost:3000
 token: (để trống, sẽ lưu sau khi đăng nhập)
 2. API Authentication
 Đăng ký tài khoản
